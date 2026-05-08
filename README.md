@@ -144,7 +144,7 @@ AstrBot/
          ├─ README.md                        # 插件说明文档
          ├─ run_ruff.bat                     # Ruff 一键格式化与自动修复脚本
          │
-         └─  assets/                          # README / 仓库展示资源
+         └─ assets/                          # README / 仓库展示资源
 ```
 
 示例结构说明。
@@ -177,7 +177,7 @@ AstrBot/
 - ShitMountain.svg (不想要可以都删了)
 - CHANGELOG.md
 - CODE_OF_CONDUCT.md (替换为你的实际邮箱)
-- CONTRIBUTING
+- CONTRIBUTING.md
 - metadata.yaml (废话)
 - README.md (不然呢)
 
