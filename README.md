@@ -70,13 +70,13 @@
 >
 > 开发时长：累计 1 天（主插件部分）
 >
-> 累计工时：约 2 小时（主插件部分）
+> 累计工时：约 3 小时（主插件部分）
 >
 > 使用的大模型：GPT 5.5(With RooCode in VSCode)
 >
 > 对话窗口搭建：VSCode RooCode 扩展
 >
-> Tokens Used：331,900
+> Tokens Used：1,814,900
 
 ---
 
@@ -94,6 +94,7 @@
 - **新增 Dependabot 配置**：通过 [`dependabot.yml`](.github/dependabot.yml) 为 GitHub Actions 与 Python 依赖提供定期更新检查能力。
 - **新增 Ruff 质量工作流**：通过 [`ruff-format.yml`](.github/workflows/ruff-format.yml) 增加格式化、自动修复、质量报告与 PR 评论能力，用于改进模板仓库的代码规范体验。
 - **新增长期未活跃 Issue 清理工作流**：通过 [`stale.yml`](.github/workflows/stale.yml) 自动标记和关闭长期无活动 Issue，减少仓库维护负担。
+- **新增自动发布工作流**：通过 [`release.yml`](.github/workflows/release.yml) 在 [`metadata.yaml`](metadata.yaml) 的版本号发生变更后自动提取版本信息、检查是否已有同名 Release，并尝试结合 [`CHANGELOG.md`](CHANGELOG.md) 生成发布说明，用于简化模板仓库的版本发布流程。
 - **新增“屎山检测”工作流**：通过 [`shit-mountain.yml`](.github/workflows/shit-mountain.yml) 集成额外的趣味化代码质量分析流程，作为仓库 CI 展示和风格化管理的一部分。
 - **新增仓库展示资源与脚本**：增加 [`assets/`](assets/) 下的可视化徽图资源，以及 Windows 环境下可直接运行的 [`run_ruff.bat`](run_ruff.bat) 脚本，方便本地维护。
 
@@ -163,27 +164,42 @@ AstrBot/
 
 ## ❓ 常见问题
 
-### Q1：示例问题
+### Q1：README 最上面那个头图好好看，怎么弄的？
 
-示例回答。
+[Socialify](https://socialify.git.ci/)；[仓库地址](https://github.com/wei/socialify)
+
+### Q2: 那个猫猫访客数又是怎么弄的？
+
+[MoeCounter](https://count.getloli.com)；[仓库地址](https://github.com/journey-ad/Moe-Counter)
+
+### Q3: 仓库状态这个卡片呢？
+
+[Repobeats](https://repobeats.axiom.co/?ref=producthunt)
+
+### Q4：要钱吗？
+
+都是免费的哦。
 
 ---
 
 ## 🚧 已知限制
 
-要在你自己的仓库使用此模板，请修改以下文件的内容为你的实际情况 (主要是涉及仓库链接的替换)：
+要在你自己的仓库使用此模板，请修改以下文件的内容为你的实际情况 (主要是涉及仓库链接、徽章资源、发布流程与文档格式的替换)：
 
 - PULL_REQUEST_TEMPLATE.md
-- ShitMountain.svg (不想要可以都删了)
+- ShitMountain.svg 等 SVG 徽章资源 (不想要可以都删了)
 - CHANGELOG.md
 - CODE_OF_CONDUCT.md (替换为你的实际邮箱)
 - CONTRIBUTING.md
 - metadata.yaml (废话)
 - README.md (不然呢)
+- .github/workflows/release.yml (如你的版本字段、分支策略或 Changelog 标题格式不同，请一并调整)
 
 > [!TIP]
 >
 > 要使用本仓库提供的 Issue 模板，您还需要运行该脚本 [Issue & PR 标签自动替换脚本](https://github.com/DBJD-CR/awesome_issue_pr_label) 以适配自定义的标签。
+>
+> 当前 [`release.yml`](.github/workflows/release.yml) 的整体思路是可复用的，但它默认依赖 [`metadata.yaml`](metadata.yaml) 中存在 `version` 字段，且更适合配合形如 `## [v1.0.0] - 2026-05-08` 的 [`CHANGELOG.md`](CHANGELOG.md) 标题格式使用；如果你的仓库使用不同的分支模型、版本命名或更新日志格式，建议在套用模板时同步修改该工作流。
 
 ## 💖 友情链接与致谢
 

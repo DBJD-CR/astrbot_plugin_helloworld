@@ -5,7 +5,7 @@
 <!-- markdownlint-disable MD041 -->
 # ChangeLog
 
-# 2026/05/08 v1.0.0
+## [v1.0.0] - 2026-05-08
 
 ## 🚀 What's Changed
 
