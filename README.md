@@ -181,6 +181,10 @@ AstrBot/
 - metadata.yaml (废话)
 - README.md (不然呢)
 
+> [!TIP]
+>
+> 要使用本仓库提供的 Issue 模板，您还需要运行该脚本 [Issue & PR 标签自动替换脚本](https://github.com/DBJD-CR/awesome_issue_pr_label) 以适配自定义的标签。
+
 ## 💖 友情链接与致谢
 
 - [AstrBot](https://github.com/AstrBotDevs/AstrBot)：在此感谢其开发团队对该项目的付出。
