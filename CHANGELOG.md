@@ -37,6 +37,7 @@
 - @codex made their first contribution in #1
 - @roomote made their first contribution in #1
 - @sourcery-ai[bot] made their first contribution in #1
+- @gemini-code-assist[bot] made their first contribution in #1
 
 **Full Changelog**: https://github.com/DBJD-CR/astrbot_plugin_helloworld/compare/v1.0.0...v1.0.0
 

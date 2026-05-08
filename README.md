@@ -109,11 +109,11 @@
 2. **安装依赖**: 本插件的核心依赖为 `None`，插件下载安装时会自动安装插件所需的依赖，通常无需额外安装。如果你的环境中确实缺少相关依赖，请安装：
 
    ```bash
-   pip install None
+   pip install -r requirements.txt
    ```
 
 3. **重启 AstrBot (可选)**: 如果插件没有正常加载或生效，可以尝试重启你的 AstrBot 程序。
-4. **配置插件**: 进入 AstrBot WebUI，找到 `helloworld` 插件，选择 `插件配置` 选项，配置相关参数：
+4. **配置插件**: 进入 AstrBot WebUI，找到 `AstrBot 插件模板` 插件，选择 `插件配置` 选项，配置相关参数：
 
 ---
 

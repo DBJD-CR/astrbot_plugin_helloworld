@@ -109,3 +109,4 @@
 
 - @GPT-5.5
 - @sourcery-ai[bot]
+- @gemini-code-assist[bot]
