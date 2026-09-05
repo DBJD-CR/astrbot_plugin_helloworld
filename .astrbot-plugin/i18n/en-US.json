@@ -68,7 +68,9 @@
       "title": "Demo Page",
       "description": "Demonstrates how a plugin Page talks to the plugin backend API.",
       "heading": "Plugin Pages Demo",
-      "ping": "Send Ping"
+      "desc": "A minimal plugin Page talking to the plugin backend via the AstrBotPluginPage bridge.",
+      "ping": "Send Ping",
+      "loading": "Loading..."
     }
   }
 }

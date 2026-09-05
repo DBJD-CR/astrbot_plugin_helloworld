@@ -2,15 +2,33 @@
 const bridge = window.AstrBotPluginPage;
 const output = document.getElementById("output");
 
+// 页面初始文案（英文 locale 下的回退文本）。
+const PAGE_DEFAULTS = {
+  heading: "Plugin Page Demo",
+  desc: "A minimal plugin Page talking to the plugin backend via the AstrBotPluginPage bridge.",
+  ping: "Ping",
+  loading: "Loading...",
+};
+
 function render() {
+  const locale = bridge.getLocale() || "zh-CN";
+  document.documentElement.lang = locale;
+  document.title = bridge.t("pages.demo.title", PAGE_DEFAULTS.heading);
   document.getElementById("heading").textContent = bridge.t(
     "pages.demo.heading",
-    "Plugin Page Demo",
+    PAGE_DEFAULTS.heading,
+  );
+  document.getElementById("desc").textContent = bridge.t(
+    "pages.demo.desc",
+    PAGE_DEFAULTS.desc,
   );
   document.getElementById("ping").textContent = bridge.t(
     "pages.demo.ping",
-    "Ping",
+    PAGE_DEFAULTS.ping,
   );
+  if (!output.textContent || output.textContent === PAGE_DEFAULTS.loading) {
+    output.textContent = bridge.t("pages.demo.loading", PAGE_DEFAULTS.loading);
+  }
 }
 
 // 等待 bridge 就绪并获取初始上下文（插件名、Page 名、locale、isDark 等）。
