@@ -266,7 +266,7 @@ AstrBot 提供的事件钩子用于拦截全局消息 / LLM 请求。**事件钩
   - 类型：`String`
   - `_special`：`select_provider`
   - 说明：下拉选择 WebUI 中已配置的聊天模型提供商。
-  - 提示：结果返回提供商字符串，可用于 `/demo ask` 等 AI 指令。
+  - 提示：结果返回提供商字符串，`/demo ask` 会优先使用此项指定的提供商；留空时回退到当前会话正在使用的聊天模型。
 
 - **TTS 提供商 (`tts_provider`)**:
   - 类型：`String`
@@ -308,12 +308,12 @@ AstrBot 提供的事件钩子用于拦截全局消息 / LLM 请求。**事件钩
   - 类型：`Boolean`
   - 默认值：`true`
   - 说明：控制是否启用 AI 相关能力。
-  - 提示：关闭后 `/demo ask` 指令与 `on_waiting_llm_request` 钩子的"正在思考"提示将不再生效。
+  - 提示：关闭后 `/demo ask` 指令将不可用；`on_waiting_llm_request` 钩子的"正在思考"提示由独立的 `enable_waiting_hint` 控制（两者均开启时才生效）。
 
 - **回复追加感叹号 (`enable_decorate`)**:
   - 类型：`Boolean`
   - 默认值：`false`
-  - 说明：演示 `on_decorating_result` 发送消息前钩子，开启后所有回复末尾会追加感叹号。
+  - 说明：演示 `on_decorating_result` 发送消息前钩子，开启后会在每条回复末尾追加感叹号（若最后一段是纯文本则直接追加，否则新增一条纯文本段）。
   - 提示：默认关闭，避免影响日常消息。
 
 - **LLM 响应前提示 (`enable_waiting_hint`)**:
