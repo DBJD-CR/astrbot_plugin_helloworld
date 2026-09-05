@@ -1,0 +1,100 @@
+{
+  "greeting": {
+    "description": "默认问候语",
+    "type": "string",
+    "default": "Hello",
+    "hint": "用于 /helloworld 指令回复时的问候语。"
+  },
+  "count_limit": {
+    "description": "计数器上限",
+    "type": "int",
+    "default": 10,
+    "slider": {
+      "min": 1,
+      "max": 20,
+      "step": 1
+    },
+    "hint": "/count 指令计数达到上限后自动清零。"
+  },
+  "enable_ai": {
+    "description": "是否启用 AI 相关指令",
+    "type": "bool",
+    "default": true,
+    "hint": "关闭后 /ask 等 AI 指令将不可用。"
+  },
+  "enable_decorate": {
+    "description": "是否在回复末尾追加感叹号",
+    "type": "bool",
+    "default": false,
+    "hint": "仅用于演示 on_decorating_result 发送消息前钩子，开启后所有回复会追加感叹号。"
+  },
+  "enable_waiting_hint": {
+    "description": "LLM 响应前发送“正在思考”提示",
+    "type": "bool",
+    "default": false,
+    "hint": "仅用于演示 on_waiting_llm_request 钩子，开启后每次调用 LLM 都会先发送提示消息。默认关闭，避免影响日常对话。"
+  },
+  "mode": {
+    "description": "运行模式",
+    "type": "string",
+    "options": ["fast", "safe"],
+    "labels": ["快速", "安全"],
+    "default": "fast",
+    "hint": "插件的运行模式，下拉框可选项见 options。"
+  },
+  "tags": {
+    "description": "标签列表",
+    "type": "list",
+    "default": [],
+    "hint": "自定义标签，每个元素为字符串。"
+  },
+  "advanced": {
+    "description": "高级配置（嵌套对象）",
+    "type": "object",
+    "hint": "演示 object 类型的嵌套子配置。",
+    "items": {
+      "ratio": {
+        "description": "比例",
+        "type": "float",
+        "default": 0.5,
+        "slider": {
+          "min": 0,
+          "max": 1,
+          "step": 0.1
+        },
+        "hint": "0-1 之间的浮点数。"
+      }
+    }
+  },
+  "ai_provider": {
+    "description": "聊天模型提供商",
+    "type": "string",
+    "_special": "select_provider",
+    "hint": "在 WebUI 中下拉选择已配置的聊天模型提供商。"
+  },
+  "tts_provider": {
+    "description": "TTS 提供商",
+    "type": "string",
+    "_special": "select_provider_tts",
+    "hint": "在 WebUI 中下拉选择已配置的语音合成提供商。"
+  },
+  "stt_provider": {
+    "description": "STT 提供商",
+    "type": "string",
+    "_special": "select_provider_stt",
+    "hint": "在 WebUI 中下拉选择已配置的语音识别提供商。"
+  },
+  "persona": {
+    "description": "人格",
+    "type": "string",
+    "_special": "select_persona",
+    "hint": "在 WebUI 中下拉选择已配置的人格。"
+  },
+  "knowledgebase": {
+    "description": "知识库（支持多选）",
+    "type": "list",
+    "default": [],
+    "_special": "select_knowledgebase",
+    "hint": "在 WebUI 中多选已配置的知识库。"
+  }
+}
