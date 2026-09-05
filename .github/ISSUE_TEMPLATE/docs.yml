@@ -72,6 +72,8 @@ body:
         - 'Satori (接入 Satori)'
         - 'Satori (使用 server-satori)'
         - 'Matrix (社区提供)'
+        - 'Mattermost'
+        - 'Rocket.Chat (社区提供)'
         - 'VoceChat (社区提供)'
         - '其他平台'
 
