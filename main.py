@@ -14,6 +14,7 @@
 - 插件 Pages 后端 API
 """
 
+import asyncio
 import random
 from pathlib import Path
 
@@ -29,7 +30,11 @@ from astrbot.core.agent.run_context import ContextWrapper
 from astrbot.core.agent.tool import FunctionTool
 from astrbot.core.astr_agent_context import AstrAgentContext
 from astrbot.core.utils.astrbot_path import get_astrbot_data_path
-from astrbot.core.utils.session_waiter import SessionController, session_waiter
+from astrbot.core.utils.session_waiter import (
+    SessionController,
+    SessionFilter,
+    session_waiter,
+)
 
 PLUGIN_NAME = "astrbot_plugin_helloworld"
 
@@ -51,6 +56,8 @@ class MyPlugin(Star):
         """AstrBot 会自动解析 _conf_schema.json 并将配置注入到 __init__。"""
         super().__init__(context)
         self.config = config
+        # 保护 KV 计数器读-改-写的 asyncio 锁，避免并发调用时计数丢失。
+        self._count_lock = asyncio.Lock()
 
         # 存储大文件规范：大文件（图片、日志等）请存放于
         # data/plugin_data/<plugin_name>/ 目录下，避免插件更新时数据被覆盖。
@@ -103,11 +110,17 @@ class MyPlugin(Star):
     @demo.command("count")
     async def count(self, event: AstrMessageEvent):
         """计数器：演示插件 KV 存储。"""
-        n = (await self.get_kv_data("count", 0)) + 1
-        await self.put_kv_data("count", n)
-        limit = self.config.get("count_limit", 10)
-        if n >= limit:
-            await self.put_kv_data("count", 0)
+        # 用 asyncio 锁保护读-改-写，避免并发执行 /demo count 时递增丢失。
+        async with self._count_lock:
+            n = (await self.get_kv_data("count", 0)) + 1
+            limit = self.config.get("count_limit", 10)
+            if n >= limit:
+                await self.put_kv_data("count", 0)
+                reset = True
+            else:
+                await self.put_kv_data("count", n)
+                reset = False
+        if reset:
             yield event.plain_result(f"计数达到上限 {limit}，已清零~")
         else:
             yield event.plain_result(f"这是第 {n} 次调用~")
@@ -143,6 +156,11 @@ class MyPlugin(Star):
         target = random.randint(1, 100)
         yield event.plain_result("已生成一个 1-100 的数字，请猜一猜~（输入“退出”结束）")
 
+        # 自定义会话 ID：绑定到发送者，避免群内其他成员干扰本局游戏。
+        class GuessSessionFilter(SessionFilter):
+            def filter(self, ev: AstrMessageEvent) -> str:
+                return f"{ev.unified_msg_origin}:{ev.get_sender_id()}"
+
         @session_waiter(timeout=60, record_history_chains=False)
         async def guess_waiter(controller: SessionController, event: AstrMessageEvent):
             text = event.message_str.strip()
@@ -166,7 +184,7 @@ class MyPlugin(Star):
                 controller.keep(timeout=30, reset_timeout=True)
 
         try:
-            await guess_waiter(event)
+            await guess_waiter(event, session_filter=GuessSessionFilter())
         except TimeoutError:
             yield event.plain_result("超时啦，游戏结束。")
         finally:
@@ -174,20 +192,32 @@ class MyPlugin(Star):
 
     @demo.command("ask")
     async def ask(self, event: AstrMessageEvent, prompt: str):
-        """AI 问答：演示调用当前会话的聊天模型。"""
+        """AI 问答：演示调用聊天模型。
+
+        优先使用配置项 ai_provider 指定的提供商；未配置时回退到当前会话使用的聊天模型。
+        """
         if not self.config.get("enable_ai", True):
             yield event.plain_result("AI 功能已关闭，请在插件配置中开启。")
             return
-        provider_id = await self.context.get_current_chat_provider_id(
-            event.unified_msg_origin
-        )
-        if not provider_id:
-            yield event.plain_result("当前会话没有可用的聊天模型，请先在 WebUI 配置。")
+        try:
+            provider_id = self.config.get("ai_provider", "") or (
+                await self.context.get_current_chat_provider_id(
+                    event.unified_msg_origin
+                )
+            )
+            if not provider_id:
+                yield event.plain_result(
+                    "当前会话没有可用的聊天模型，请先在 WebUI 配置。"
+                )
+                return
+            llm_resp = await self.context.llm_generate(
+                chat_provider_id=provider_id,
+                prompt=prompt,
+            )
+        except Exception as e:
+            logger.error(f"/demo ask 请求失败: {e}")
+            yield event.plain_result("AI 请求失败，请检查模型提供商配置后重试。")
             return
-        llm_resp = await self.context.llm_generate(
-            chat_provider_id=provider_id,
-            prompt=prompt,
-        )
         yield event.plain_result(llm_resp.completion_text)
 
     # ============ 权限过滤 ============
@@ -230,17 +260,21 @@ class MyPlugin(Star):
         """等待 LLM 响应时触发，适合发送"正在思考"提示。
 
         注意：此钩子默认关闭（enable_waiting_hint=false），
-        因为开启后每次调用 LLM 都会额外发送一条提示消息，
+        且仅在 enable_ai=true 时才生效；
+        开启后每次调用 LLM 都会额外发送一条提示消息，
         会影响日常使用，请按需开启。
         """
         if not self.config.get("enable_waiting_hint", False):
+            return
+        if not self.config.get("enable_ai", True):
             return
         await event.send(event.plain_result("🤔 正在思考中..."))
 
     @filter.on_llm_request()
     async def on_llm_request(self, event: AstrMessageEvent, req: ProviderRequest):
         """LLM 请求发出前触发，可修改请求（注意有三参数）。"""
-        logger.debug(f"on_llm_request: system_prompt={req.system_prompt[:50]}...")
+        system_prompt = (req.system_prompt or "")[:50]
+        logger.debug(f"on_llm_request: system_prompt={system_prompt}...")
 
     @filter.on_llm_response()
     async def on_llm_response(self, event: AstrMessageEvent, resp: LLMResponse):
@@ -298,8 +332,11 @@ class MyPlugin(Star):
             return
         result = event.get_result()
         chain = result.chain
+        # 若最后一段是纯文本，则直接追加；否则新加一条纯文本消息段。
         if chain and isinstance(chain[-1], Comp.Plain):
-            chain[-1].text += "!"  # 给最后一条纯文本消息追加感叹号
+            chain[-1].text += "!"
+        else:
+            chain.append(Comp.Plain("!"))
 
     @filter.after_message_sent()
     async def after_message_sent(self, event: AstrMessageEvent):
