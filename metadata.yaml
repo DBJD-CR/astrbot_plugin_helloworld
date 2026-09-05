@@ -1,15 +1,18 @@
 name: astrbot_plugin_helloworld # 插件唯一识别名，以 astrbot_plugin_ 前缀开头
 display_name: AstrBot 插件模板 # 用于展示的名字，可以是方便人类阅读的名字（需要版本 >= v4.5.0，低版本不会报错，请放心填写）
-desc: 一个为 AstrBot 设计的自定义插件模板，基于官方基础模板扩展而来。适合作为个人或团队维护 AstrBot 插件仓库时的起始模板。 # 插件简短描述
-version: v1.0.0 # 插件版本号。格式：v1.1.1 或者 v1.1
+short_desc: 一个演示 AstrBot 插件能力的起始模板。 # （可选）插件市场卡片上的短描述，未提供时回退显示 desc
+desc: 一个为 AstrBot 设计的自定义插件模板，并演示了 AstrBot 插件支持的能力。基于官方基础模板扩展而来。适合作为个人或团队维护 AstrBot 插件仓库时的起始模板。 # 插件描述
+version: v1.0.1 # 插件版本号。格式：v1.1.1 或者 v1.1
 author: DBJD-CR # 作者
 repo: https://github.com/DBJD-CR/astrbot_plugin_helloworld # 插件的仓库地址
-astrbot_version: ">=4.11.2" # 插件适配的 AstrBot 版本范围
+astrbot_version: ">=4.24.2" # 插件适配的 AstrBot 版本范围
 support_platforms: # 请替换为你的插件实际支持的平台
   - aiocqhttp
   - qq_official
+  - qq_official_webhook
   - telegram
   - wecom
+  - wecom_ai_bot
   - lark
   - dingtalk
   - discord
@@ -17,6 +20,15 @@ support_platforms: # 请替换为你的插件实际支持的平台
   - kook
   - vocechat
   - weixin_official_account
+  - weixin_oc
   - satori
   - misskey
   - line
+  - matrix
+  - mattermost
+social_link: https://github.com/DBJD-CR
+tags:
+  - 插件模板
+  - template
+  - helloworld
+  - 工具

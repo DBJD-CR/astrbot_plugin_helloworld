@@ -1,0 +1,57 @@
+:root {
+  --bg: #ffffff;
+  --text: #1a1a1a;
+  --card-bg: #f5f5f5;
+  --accent-bg: #d9e8f7;
+  --accent-text: #1a1a1a;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1a1a;
+  --text: #e0e0e0;
+  --card-bg: #262626;
+  --accent-bg: #3a5a80;
+  --accent-text: #ffffff;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px 32px;
+  max-width: 480px;
+  width: calc(100% - 48px);
+}
+
+button {
+  background: var(--accent-bg);
+  color: var(--accent-text);
+  border: 1px solid var(--accent-bg);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:hover {
+  filter: brightness(0.96);
+}
+
+pre {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 12px;
+  overflow: auto;
+  font-size: 13px;
+}

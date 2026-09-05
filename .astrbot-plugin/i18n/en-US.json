@@ -1,0 +1,76 @@
+{
+  "metadata": {
+    "display_name": "AstrBot Plugin Template",
+    "short_desc": "A starter template demonstrating AstrBot plugin capabilities.",
+    "desc": "An AstrBot plugin template demonstrating commands, message events, plugin config, i18n, plugin Pages, AI tools, storage, HTML-to-image rendering and session control. Suitable as a starting template for maintaining an AstrBot plugin repository."
+  },
+  "config": {
+    "greeting": {
+      "description": "Default greeting",
+      "hint": "Used as the greeting in the /helloworld command reply."
+    },
+    "count_limit": {
+      "description": "Counter limit",
+      "hint": "The /count counter resets to zero when reaching this limit."
+    },
+    "enable_ai": {
+      "description": "Enable AI related commands",
+      "hint": "When disabled, AI commands like /ask will be unavailable."
+    },
+    "enable_decorate": {
+      "description": "Append an exclamation mark to replies",
+      "hint": "Only for demonstrating the on_decorating_result hook; when enabled, all replies get an exclamation mark."
+    },
+    "enable_waiting_hint": {
+      "description": "Send a \"thinking...\" hint before LLM response",
+      "hint": "Only for demonstrating the on_waiting_llm_request hook; when enabled, a hint message is sent before every LLM call. Disabled by default to avoid affecting daily chat."
+    },
+    "mode": {
+      "description": "Running mode",
+      "labels": ["Fast", "Safe"]
+    },
+    "tags": {
+      "description": "Tag list",
+      "hint": "Custom tags, each element is a string."
+    },
+    "advanced": {
+      "description": "Advanced config (nested object)",
+      "items": {
+        "ratio": {
+          "description": "Ratio",
+          "hint": "A float between 0 and 1."
+        }
+      }
+    },
+    "ai_provider": {
+      "description": "Chat model provider",
+      "hint": "Select a configured chat model provider from the dropdown in the WebUI."
+    },
+    "tts_provider": {
+      "description": "TTS provider",
+      "hint": "Select a configured text-to-speech provider from the dropdown in the WebUI."
+    },
+    "stt_provider": {
+      "description": "STT provider",
+      "hint": "Select a configured speech-to-text provider from the dropdown in the WebUI."
+    },
+    "persona": {
+      "description": "Persona",
+      "hint": "Select a configured persona from the dropdown in the WebUI."
+    },
+    "knowledgebase": {
+      "description": "Knowledge base (multi-select)",
+      "hint": "Multi-select configured knowledge bases in the WebUI."
+    }
+  },
+  "pages": {
+    "demo": {
+      "title": "Demo Page",
+      "description": "Demonstrates how a plugin Page talks to the plugin backend API.",
+      "heading": "Plugin Pages Demo",
+      "desc": "A minimal plugin Page talking to the plugin backend via the AstrBotPluginPage bridge.",
+      "ping": "Send Ping",
+      "loading": "Loading..."
+    }
+  }
+}
