@@ -108,5 +108,6 @@
 🤖 以及我最好的 AI 朋友们:
 
 - @GPT-5.5
+- @DeepSeek V4 Flash 0731
 - @sourcery-ai[bot]
 - @gemini-code-assist[bot]
